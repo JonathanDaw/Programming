@@ -1,0 +1,8 @@
+get key from user inputted command line argument
+convert key into integer
+prompt user for plaintext
+for each character in plaintext
+  preserve casing
+  shift plaintext character by key
+print ciphertext
+print a newline

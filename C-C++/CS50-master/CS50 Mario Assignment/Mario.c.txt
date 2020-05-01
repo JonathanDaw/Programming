@@ -1,0 +1,49 @@
+#include <cs50.h>
+#include <stdio.h>
+
+int get_positive_int(string prompt); //declares that this function will be used
+void print_spaces(int spaces);
+void print_hashes(int hashes);
+
+
+int main(void) //calls upon all functions listed below
+{
+    int h = get_positive_int("Enter a height between 1 and 8: "); 
+    for (int i = 0; i < h; i++)
+    {
+        print_spaces(h - i - 1); //subtracts 1 and the value of i from the inputed height and repeating until i is no longer less than the inputed height
+        print_hashes(i + 1); //prints the inputed height of hashes, starting at one and increasing in intervals of one until reaching the inputed height
+        printf("  "); //prints a gap on each line after printing the necessary number of spaces and hashes
+        print_hashes(i + 1); //prints hashes on the right side of the gap following the same logic as above
+        printf("\n");
+    }
+        
+        
+}
+
+void print_hashes(int hashes) //takes the inputed value and printing that number ofhashes
+{
+    for (int l = 0; l < hashes; l++)
+    {
+        printf("#");
+    }
+}
+
+void print_spaces(int spaces) //takes the inputed height and prints spaces
+{
+    for (int i = 0; i < spaces; i++)
+    {
+        printf(" ");
+    }
+}
+    
+int get_positive_int(string prompt) 
+{
+    int n;
+    do
+    {
+        n = get_int("%s", prompt); //checks if the user's input is between 1 and 8. Will keep prompting user until a valid input is entered
+    }
+    while (n > 8 || n < 1);
+    return n;
+}

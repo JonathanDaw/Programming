@@ -1,0 +1,81 @@
+// Takes an inputed credit card number and determines if it is
+// A valid credit card. If so, the proper cc company name will be displayed
+#include <stdio.h>
+#include <cs50.h>
+int get_length(long ccnum);
+int get_twoDigits(long digits);
+int get_sum(long luhn, int length);
+int main(void)
+{
+    // Takes the inputed cc number and that value is
+    // Used in the other functions
+    long c = get_long("Input credit card number: ");
+    int length = get_length(c);
+    int twoDigits = get_twoDigits(c);
+    int sum = get_sum(c, length);
+    // determines if Luhn's Algorithm returns a 0
+    bool flag = (sum % 10 == 0) ? true : false;
+    // Determines which cc company the card belongs to, if any
+    if ((length == 15 && (twoDigits == 34 || twoDigits == 37)) && flag)
+    {
+        printf("AMEX\n");
+    }
+    else if ((length == 13 || length == 16) && (twoDigits > 39 && twoDigits < 50) && flag)
+    {
+        printf("VISA\n");
+    }
+    else if (length == 16 && (twoDigits > 50 && twoDigits < 56) && flag)
+    {
+        printf("MASTERCARD\n");
+    }
+    else
+    {
+        printf("INVALID\n");
+    }
+}
+// Applies Luhn's algorithm and determines if the sum ends in 0
+int get_sum(long luhn, int length)
+{
+    int sum = 0;
+    for (int digitPosition = 1; digitPosition <= length; digitPosition++)
+    {
+        int digit = luhn % 10;
+        if (digitPosition % 2 == 0)
+        { 
+            if ((digit * 2) > 9)
+            {
+                sum += (digit * 2) - 9;
+            }
+            else
+            {
+                sum += digit * 2;
+            }
+        }
+        else
+        {
+            sum += digit;
+        }
+        luhn /= 10;
+    }
+    return sum;
+}
+// Obtains the first two digits of the cc number
+int get_twoDigits(long digits)
+{ 
+    while (digits > 100)
+    {
+        digits /= 10;
+    }
+    return digits;
+}
+// Obtains length of cc number
+int get_length(long ccnum)
+{
+    int count = 0;
+    while (ccnum != 0)
+    {
+        ccnum /= 10;
+        ++count;
+    }
+    return count;
+}
