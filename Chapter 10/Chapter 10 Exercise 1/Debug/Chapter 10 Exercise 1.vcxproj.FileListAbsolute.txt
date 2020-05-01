@@ -1,2 +1,0 @@
-C:\Users\Jonathan\Desktop\Spring 2020\C++ Programming\Exercises\Chapter 10\Chapter 10 Exercise 1\Debug\Chapter 10 Exercise 1.exe
-C:\Users\Jonathan\Desktop\Spring 2020\C++ Programming\Exercises\Chapter 10\Chapter 10 Exercise 1\Debug\Chapter 10 Exercise 1.pdb
