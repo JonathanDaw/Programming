@@ -19,7 +19,7 @@ public:
 	void setBalance(double inputBalance) {
 		balance = inputBalance;
 	}
-	std::string getName() const{
+	std::string getName() const {
 		return name;
 	}
 	int getAccountNumber() const {
@@ -31,7 +31,7 @@ public:
 	bankAccount(std::string name = "", int accountNumber = 0, double balance = 0) {
 
 	}
-	
+
 
 private:
 	std::string name;
@@ -40,6 +40,7 @@ protected:
 	double balance;
 };
 
+// A checking account inherits properties from a bank account + has these functions
 class checkingAccount : public bankAccount {
 	virtual void writeCheck(double) = 0;
 
@@ -54,6 +55,7 @@ class checkingAccount : public bankAccount {
 	}
 };
 
+// A service charge checking account inherits most of its properties from the standard checking account, however, the variable values will be different
 class serviceChargeChecking : public checkingAccount {
 public:
 	void checkingAccount::writeCheck(double) {
@@ -66,6 +68,7 @@ private:
 	const double minimumBalance = 0;
 };
 
+// A no charge checking account inherits properties from a checking account, but with separate values than the service charge account
 class noServiceChargeChecking : public checkingAccount {
 public:
 	void checkingAccount::writeCheck(double) {
@@ -77,6 +80,7 @@ private:
 	const int monthlyCharge = 0;
 };
 
+// The high interest checking inherits properties from a checking account, but contains different values than both the service charge & no service charge accounts
 class highInterestChecking : public noServiceChargeChecking {
 public:
 	void checkingAccount::writeCheck(double) {
@@ -88,6 +92,7 @@ private:
 	const double minimumBalance = 50000.0;
 };
 
+// A savings account inherits properties from the main bank account class. The interest rate is different amongst the various savings accounts
 class savingsAccount : public bankAccount {
 public:
 	void bankAccount::makeDeposit(double) {
@@ -103,6 +108,7 @@ class highInterestSavings : public savingsAccount {
 
 };
 
+// The COD class inherits properties from the main bank account class
 class certificateOfDeposit : public bankAccount {
 public:
 
