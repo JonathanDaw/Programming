@@ -84,11 +84,7 @@ def get_guessed_word(secret_word, letters_guessed):
         else:
             guessed_word += "_ "
 
-
     return guessed_word
-
-
-
 
 
 def get_available_letters(letters_guessed):
@@ -129,14 +125,15 @@ def hangman(secret_word):
 
     Follows the other limitations detailed in the problem write-up.
     """
-    current_guess = ""
     letters_guessed = ""
     guesses_remaining = 6
     warnings_remaining = 3
+    unique_letters = 0
     print("Welcome to the game Hangman!")
     print("I am thinking of a word that is", len(secret_word), "letters long.")
-    print("You have", warnings_remaining, "warnings left.\n-------------")
+    print("You have", warnings_remaining, "warnings left.")
     while guesses_remaining > 0 and not is_word_guessed(secret_word, letters_guessed):
+        print("-------------")
         print("You have", guesses_remaining, "guesses remaining")
         print("Available letters:", get_available_letters(letters_guessed))
         current_guess = input("Please guess a letter: ")
@@ -152,24 +149,29 @@ def hangman(secret_word):
         if current_guess in letters_guessed:
             if warnings_remaining > 0:
                 warnings_remaining -= 1
-                print("Oops! You've already guessed that letter. You now have", warnings_remaining, "warnings:", get_guessed_word(secret_word, letters_guessed))
+                print("Oops! You've already guessed that letter. You now have", warnings_remaining, "warnings:",
+                      get_guessed_word(secret_word, letters_guessed))
             else:
                 guesses_remaining -= 1
-                print("Oops! You've already guessed that letter. You have no warnings left and", guesses_remaining, "guesses left:", get_guessed_word(secret_word, letters_guessed))
+                print("Oops! You've already guessed that letter. You have no warnings left and", guesses_remaining,
+                      "guesses left:", get_guessed_word(secret_word, letters_guessed))
 
         else:
             letters_guessed += current_guess
+            unique_letters += 1
             if current_guess in secret_word:
                 print("Good guess:", get_guessed_word(secret_word, letters_guessed))
             else:
-                guesses_remaining -= 1
+                if current_guess in ['a', 'e', 'i', 'o', 'u']:
+                    guesses_remaining -= 2
+                else:
+                    guesses_remaining -= 1
                 print("Oops! That letter is not in my word:", get_guessed_word(secret_word, letters_guessed), " ")
-
-
-
-
-
-
+    final_score = guesses_remaining * unique_letters
+    if guesses_remaining <= 0:
+        print("-------------\nSorry, you ran out of guesses. The word was", secret_word + ".")
+    else:
+        print("Congratulations, you won! \nYour total score for this game is:", final_score)
 
 
 # When you've completed your hangman function, scroll down to the bottom
@@ -251,8 +253,8 @@ if __name__ == "__main__":
     # To test part 2, comment out the pass line above and
     # uncomment the following two lines.
 
-    # secret_word = choose_word(wordlist)
-    hangman("apples")
+    secret_word = choose_word(wordlist)
+    hangman(secret_word)
 
 ###############
 
