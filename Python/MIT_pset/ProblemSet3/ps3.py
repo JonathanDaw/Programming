@@ -17,7 +17,7 @@ HAND_SIZE = 7
 
 SCRABBLE_LETTER_VALUES = {
     'a': 1, 'b': 3, 'c': 3, 'd': 2, 'e': 1, 'f': 4, 'g': 2, 'h': 4, 'i': 1, 'j': 8, 'k': 5, 'l': 1, 'm': 3, 'n': 1,
-    'o': 1, 'p': 3, 'q': 10, 'r': 1, 's': 1, 't': 1, 'u': 1, 'v': 4, 'w': 4, 'x': 8, 'y': 4, 'z': 10
+    'o': 1, 'p': 3, 'q': 10, 'r': 1, 's': 1, 't': 1, 'u': 1, 'v': 4, 'w': 4, 'x': 8, 'y': 4, 'z': 10, '*': 0
 }
 
 # -----------------------------------
@@ -146,15 +146,20 @@ def deal_hand(n):
     hand = {}
     num_vowels = int(math.ceil(n / 3))
 
-    for i in range(num_vowels):
+    for i in range(num_vowels - 1):
         x = random.choice(VOWELS)
         hand[x] = hand.get(x, 0) + 1
-
+    for i in range(1):
+        x = "*"
+        hand[x] = hand.get(x, 0) + 1
     for i in range(num_vowels, n):
         x = random.choice(CONSONANTS)
         hand[x] = hand.get(x, 0) + 1
 
     return hand
+
+
+print(deal_hand(6))
 
 
 #
@@ -206,21 +211,45 @@ def is_valid_word(word, hand, word_list):
     """
 
     word = word.lower()
+    new_word = word
     new_hand = hand.copy()
-    if word in word_list:
-        for letter in word:
-            if letter in new_hand:
-                if new_hand[letter] > 0:
-                    new_hand[letter] -= 1
-                else:
-                    return False
+    for letter in word:
+        if letter in new_hand:
+            if new_hand[letter] > 0:
+                new_hand[letter] -= 1
             else:
+                del(new_hand[letter])
+
+    if "*" in word:
+        index = word.find("*")
+        for vowel in VOWELS:
+            new_word = new_word[:index] + vowel + new_word[index+1:]
+            if new_word in word_list:
+                break
+
+    if new_word in word_list:
+        for letter in word:
+            if letter not in new_hand:
                 return False
         return True
     else:
         return False
 
+    # if word in word_list:
+    #     for letter in word:
+    #         if letter in new_hand:
+    #             if new_hand[letter] > 0:
+    #                 new_hand[letter] -= 1
+    #             else:
+    #                 return False
+    #         else:
+    #             return False
+    #     return True
+    # else:
+    #     return False
 
+
+# print(is_valid_word("c*ws", {'c':1,'o':2,'w':1,'s':1}, load_words()))
 #
 # Problem #5: Playing a hand
 #
