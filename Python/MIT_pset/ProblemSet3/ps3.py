@@ -324,15 +324,14 @@ def play_hand(hand, word_list):
     deal_hand(HAND_SIZE)
     new_hand = hand.copy()
     while True:
-        #
+        # uses a list for iterating over the empty elements in the dictionary and deleting them
         delete = []
         for key, val in new_hand.items():
             if val == 0:
                 delete.append(key)
-
         for i in delete:
             del new_hand[i]
-
+        # conditional statement returns False if the dictionary for hand is empty, thus ending the game
         if not bool(new_hand):
             print("Ran out of letters. Total score:", total_score)
             return False
@@ -387,9 +386,22 @@ def substitute_hand(hand, letter):
     letter: string
     returns: dictionary (string -> int)
     """
-
-    pass  # TO DO... Remove this line when you implement this function
-
+    letters_in_hand = []
+    for char in hand:
+        if char not in letters_in_hand:
+            letters_in_hand.append(char)
+    number = hand[letter]
+    print(number)
+    if letter in hand.keys():
+        if letter in VOWELS:
+            del(hand[letter])
+            for i in range(number) :
+                hand[random.choice([s for s in VOWELS if s not in letters_in_hand])] = 1
+        else:
+            del(hand[letter])
+            for i in range(number):
+                hand[random.choice([s for s in CONSONANTS if s not in letters_in_hand])] = 1
+    return hand
 
 def play_game(word_list):
     """
@@ -421,8 +433,16 @@ def play_game(word_list):
 
     word_list: list of lowercase strings
     """
+    hand = deal_hand(HAND_SIZE)
+    display_hand(hand)
+    prompt = input("Would you like to substitute a letter? ")
+    prompt = prompt.lower()
+    if prompt == "yes":
+        letter = input("What letter would you like to substitute?")
+        substitute_hand(hand, letter)
+    print(hand)
 
-    print("play_game not implemented.")  # TO DO... Remove this line when you implement this function
+    # print("play_game not implemented.")  # TO DO... Remove this line when you implement this function
 
 
 #
@@ -432,5 +452,5 @@ def play_game(word_list):
 #
 if __name__ == '__main__':
     word_list = load_words()
-    play_hand(deal_hand(HAND_SIZE), word_list)
-    # play_game(word_list)
+    # play_hand(deal_hand(HAND_SIZE), word_list)
+    play_game(word_list)
