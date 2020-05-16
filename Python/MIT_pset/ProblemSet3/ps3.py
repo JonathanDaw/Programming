@@ -324,9 +324,19 @@ def play_hand(hand, word_list):
     deal_hand(HAND_SIZE)
     new_hand = hand.copy()
     while True:
+        #
+        delete = []
+        for key, val in new_hand.items():
+            if val == 0:
+                delete.append(key)
+
+        for i in delete:
+            del new_hand[i]
+
         if not bool(new_hand):
             print("Ran out of letters. Total score:", total_score)
             return False
+
         display_hand(new_hand)
         word = input('Enter word, or "!!" to indicate that you are finished: ')
         if word == "!!":
