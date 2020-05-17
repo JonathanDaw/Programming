@@ -334,13 +334,13 @@ def play_hand(hand, word_list):
         # conditional statement returns False if the dictionary for hand is empty, thus ending the game
         if not bool(new_hand):
             print("Ran out of letters. Total score:", total_score)
-            return False
+            return total_score
 
         display_hand(new_hand)
         word = input('Enter word, or "!!" to indicate that you are finished: ')
         if word == "!!":
             print("Total:", total_score)
-            return False
+            return total_score
         else:
             if is_valid_word(word, hand, word_list):
                 total_score += get_word_score(word, calculate_handlen(new_hand))
@@ -350,7 +350,6 @@ def play_hand(hand, word_list):
             else:
                 print("That is not a valid word! Please choose another word.")
                 new_hand = update_hand(new_hand, word)
-
 
 
 
@@ -387,21 +386,17 @@ def substitute_hand(hand, letter):
     returns: dictionary (string -> int)
     """
     letters_in_hand = []
+    all_letters = VOWELS + CONSONANTS
     for char in hand:
         if char not in letters_in_hand:
             letters_in_hand.append(char)
-    number = hand[letter]
-    print(number)
-    if letter in hand.keys():
-        if letter in VOWELS:
-            del(hand[letter])
-            for i in range(number) :
-                hand[random.choice([s for s in VOWELS if s not in letters_in_hand])] = 1
-        else:
-            del(hand[letter])
-            for i in range(number):
-                hand[random.choice([s for s in CONSONANTS if s not in letters_in_hand])] = 1
-    return hand
+    new_hand = hand.copy()
+    number = new_hand[letter]
+    if letter in new_hand.keys():
+        del(new_hand[letter])
+        new_hand[random.choice([s for s in all_letters if s not in letters_in_hand and s != letter])] = number
+        return new_hand
+
 
 def play_game(word_list):
     """
@@ -415,7 +410,7 @@ def play_game(word_list):
     * For each hand, before playing, ask the user if they want to substitute
       one letter for another. If the user inputs 'yes', prompt them for their
       desired letter. This can only be done once during the game. Once the
-      substitue option is used, the user should not be asked if they want to
+      substitute option is used, the user should not be asked if they want to
       substitute letters in the future.
 
     * For each hand, ask the user if they would like to replay the hand.
@@ -433,14 +428,40 @@ def play_game(word_list):
 
     word_list: list of lowercase strings
     """
+    overall_score = 0
     hand = deal_hand(HAND_SIZE)
+    new_hand = hand.copy()
     display_hand(hand)
-    prompt = input("Would you like to substitute a letter? ")
-    prompt = prompt.lower()
-    if prompt == "yes":
-        letter = input("What letter would you like to substitute?")
-        substitute_hand(hand, letter)
-    print(hand)
+    number_of_hands = int(input("Enter total number of hands: "))
+    game_number = 0
+    allow_substitute = True
+    allow_replay = True
+    while game_number < number_of_hands:
+        if allow_substitute:
+            prompt = input("Would you like to substitute a letter? Type 'yes' to substitute a letter: ")
+            prompt = prompt.lower()
+            if prompt == "yes":
+                letter = input("What letter would you like to substitute?")
+                new_hand = substitute_hand(hand, letter)
+                allow_substitute = False
+        current_score = play_hand(hand, word_list)
+        if allow_replay:
+            replay = input("Would you like to replay this hand? Type 'yes' to replay this hand: ")
+            replay = replay.lower()
+            if replay == "yes":
+                replay_score = play_hand(new_hand, word_list)
+                current_score = max(current_score, replay_score)
+                allow_replay = False
+        overall_score += current_score
+
+
+
+
+
+
+
+
+
 
     # print("play_game not implemented.")  # TO DO... Remove this line when you implement this function
 
