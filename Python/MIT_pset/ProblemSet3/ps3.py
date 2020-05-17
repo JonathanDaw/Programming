@@ -118,7 +118,7 @@ def display_hand(hand):
 
     hand: dictionary (string -> int)
     """
-
+    print("Current hand: ", end=' ')
     for letter in hand.keys():
         for j in range(hand[letter]):
             print(letter, end=' ')  # print all on the same line
@@ -218,7 +218,7 @@ def is_valid_word(word, hand, word_list):
                 new_hand[letter] -= 1
             else:
                 del (new_hand[letter])
-
+    # Uses string slicing to insert a vowel in place of the wildcard("*") to check for valid word
     if "*" in word:
         index = word.find("*")
         for vowel in VOWELS:
@@ -233,19 +233,6 @@ def is_valid_word(word, hand, word_list):
         return True
     else:
         return False
-
-    # if word in word_list:
-    #     for letter in word:
-    #         if letter in new_hand:
-    #             if new_hand[letter] > 0:
-    #                 new_hand[letter] -= 1
-    #             else:
-    #                 return False
-    #         else:
-    #             return False
-    #     return True
-    # else:
-    #     return False
 
 
 #
@@ -333,7 +320,7 @@ def play_hand(hand, word_list):
             del new_hand[i]
         # conditional statement returns False if the dictionary for hand is empty, thus ending the game
         if not bool(new_hand):
-            print("Ran out of letters. Total score:", total_score)
+            print("Ran out of letters.")
             return total_score
 
         display_hand(new_hand)
@@ -350,9 +337,6 @@ def play_hand(hand, word_list):
             else:
                 print("That is not a valid word! Please choose another word.")
                 new_hand = update_hand(new_hand, word)
-
-
-
 
 #
 # Problem #6: Playing a game
@@ -429,42 +413,31 @@ def play_game(word_list):
     word_list: list of lowercase strings
     """
     overall_score = 0
-    hand = deal_hand(HAND_SIZE)
-    new_hand = hand.copy()
-    display_hand(hand)
     number_of_hands = int(input("Enter total number of hands: "))
     game_number = 0
     allow_substitute = True
     allow_replay = True
     while game_number < number_of_hands:
+        game_number += 1
+        hand = deal_hand(HAND_SIZE)
+        new_hand = hand.copy()
         if allow_substitute:
+            display_hand(hand)
             prompt = input("Would you like to substitute a letter? Type 'yes' to substitute a letter: ")
-            prompt = prompt.lower()
-            if prompt == "yes":
+            if prompt.lower() == "yes":
                 letter = input("What letter would you like to substitute?")
                 new_hand = substitute_hand(hand, letter)
                 allow_substitute = False
-        current_score = play_hand(hand, word_list)
+        current_score = play_hand(new_hand, word_list)
+        print("Total score for this hand:", current_score,"\n-------------")
         if allow_replay:
             replay = input("Would you like to replay this hand? Type 'yes' to replay this hand: ")
-            replay = replay.lower()
-            if replay == "yes":
+            if replay.lower() == "yes":
                 replay_score = play_hand(new_hand, word_list)
                 current_score = max(current_score, replay_score)
                 allow_replay = False
         overall_score += current_score
-
-
-
-
-
-
-
-
-
-
-    # print("play_game not implemented.")  # TO DO... Remove this line when you implement this function
-
+    print("\nTotal score over all hands:", overall_score)
 
 #
 # Build data structures used for entire session and play game
