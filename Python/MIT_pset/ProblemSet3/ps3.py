@@ -413,7 +413,12 @@ def play_game(word_list):
     word_list: list of lowercase strings
     """
     overall_score = 0
-    number_of_hands = int(input("Enter total number of hands: "))
+    while True:
+        try:
+            number_of_hands = int(input("Enter total number of hands: "))
+            break
+        except ValueError:
+            print("Input must be an integer.")
     game_number = 0
     allow_substitute = True
     allow_replay = True
