@@ -416,9 +416,12 @@ def play_game(word_list):
     while True:
         try:
             number_of_hands = int(input("Enter total number of hands: "))
-            break
+            if number_of_hands > 0:
+                break
+            else:
+                raise ValueError
         except ValueError:
-            print("Input must be an integer.")
+            print("Input must be a positive integer.")
     game_number = 0
     allow_substitute = True
     allow_replay = True
